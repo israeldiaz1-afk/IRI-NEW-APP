@@ -6,6 +6,7 @@
   <meta name="theme-color" content="#0a0f16"/>
   <title>RoadCheck IRI Pro</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     :root {
       --bg-deep: #0a0f16;
@@ -53,7 +54,7 @@
       margin-bottom: 8px;
     }
     .app-logo {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       font-weight: 800;
       color: var(--accent-primary);
       letter-spacing: 1px;
@@ -62,16 +63,16 @@
     .nav-row {
       display: flex;
       gap: 6px;
-      margin-top: 8px;
+      margin-top: 6px;
     }
     .nav-btn {
       flex: 1;
       background: rgba(255,255,255,0.05);
       border: 1px solid var(--border-glass);
       color: var(--text-secondary);
-      padding: 10px 12px;
+      padding: 8px 10px;
       border-radius: 22px;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 600;
       cursor: pointer;
       display: flex;
@@ -86,30 +87,30 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
       overflow-y: auto;
     }
     .iri-indicators {
       display: flex;
-      gap: 10px;
+      gap: 8px;
     }
     .iri-card {
       flex: 1;
       background: var(--bg-panel);
       border: 1px solid var(--border-glass);
-      border-radius: 16px;
-      padding: 12px;
+      border-radius: 14px;
+      padding: 10px;
       text-align: center;
     }
     .iri-card .label {
-      font-size: 0.6rem;
+      font-size: 0.55rem;
       text-transform: uppercase;
       letter-spacing: 1px;
       opacity: 0.7;
     }
     .iri-card .value {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 1.8rem;
+      font-size: 1.5rem;
       font-weight: 700;
       display: block;
       margin-top: 4px;
@@ -117,52 +118,53 @@
     .secondary-metrics {
       display: flex;
       justify-content: space-around;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       opacity: 0.9;
-      padding: 4px 0;
+      padding: 2px 0;
     }
-    .placeholder-box {
+    .map-container {
+      height: 200px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border-glass);
+      background: #0f172a;
+      flex-shrink: 0;
+    }
+    #mapMeasure { height: 100%; width: 100%; }
+    .chart-placeholder {
       background: var(--bg-panel);
       border: 1px solid var(--border-glass);
-      border-radius: 18px;
+      border-radius: 16px;
+      height: 160px;
+      flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: var(--text-secondary);
     }
-    .map-placeholder {
-      height: 225px;
-      flex-shrink: 0;
-    }
-    .chart-placeholder {
-      height: 180px;
-      flex-shrink: 0;
-    }
-
-    /* Botones pegados al gráfico */
     .action-buttons {
       display: flex;
-      gap: 6px;
+      gap: 5px;
       flex-wrap: wrap;
-      margin-top: 0;  /* pegado al gráfico */
+      margin-top: 2px;
     }
     .btn {
-      padding: 10px 12px;
-      border-radius: 22px;
+      padding: 9px 10px;
+      border-radius: 20px;
       border: none;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 600;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 4px;
+      gap: 3px;
       flex: 1;
-      min-width: 60px;
+      min-width: 55px;
       transition: all 0.2s;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
       white-space: nowrap;
     }
     .btn-primary { background: linear-gradient(135deg, var(--accent-primary), var(--accent-warm)); color: #0a0f16; }
@@ -190,10 +192,13 @@
         <span>Vel: ---</span>
         <span>Dist: 0 m</span>
       </div>
-      <div class="placeholder-box map-placeholder">MAPA (225 px)</div>
-      <div class="placeholder-box chart-placeholder">GRÁFICO (180 px)</div>
 
-      <!-- Botones pegados justo debajo del gráfico -->
+      <!-- MAPA REAL -->
+      <div class="map-container"><div id="mapMeasure"></div></div>
+
+      <!-- PLACEHOLDER DEL GRÁFICO (luego lo cambiamos por el real) -->
+      <div class="chart-placeholder">GRÁFICO (160 px)</div>
+
       <div class="action-buttons">
         <button class="btn btn-secondary">⚡ CORR. VELOCIDAD</button>
         <button class="btn btn-secondary">📱 CALIBRAR</button>
@@ -201,5 +206,12 @@
       </div>
     </div>
   </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Inicializar mapa inmediatamente
+    const map = L.map('mapMeasure', { zoomControl: false, attributionControl: false }).setView([40.4168, -3.7038], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+  </script>
 </body>
 </html>
