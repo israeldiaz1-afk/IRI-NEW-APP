@@ -1,0 +1,16 @@
+{
+  "name": "Roadcheck IRI Pro",
+  "short_name": "Roadcheck",
+  "description": "Medición profesional de rugosidad de pavimentos",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#f59e0b",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2555/2555013.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
